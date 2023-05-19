@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "467233064041",
+    "project_id": "indurama-f99b2",
+    "storage_bucket": "indurama-f99b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467233064041:android:9a5bf43467275ced8a8ef8",
+        "android_client_info": {
+          "package_name": "com.mycompany.responsivedashboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467233064041-qc3gghfcnf3rr9l70p756cuom1tfhou8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKM9NJXRyVW6EoTAFz3tc2r1ghfuiB9H4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467233064041-qc3gghfcnf3rr9l70p756cuom1tfhou8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "467233064041-oss52sinemr15nqiqtbfjilrj2tm88k3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.responsivedashboard"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
