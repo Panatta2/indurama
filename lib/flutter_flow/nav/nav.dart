@@ -3,16 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
-import '../flutter_flow_theme.dart';
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 
 import '../../auth/base_auth_user_provider.dart';
 
-import '../../index.dart';
-import '../../main.dart';
-import '../lat_lng.dart';
-import '../place.dart';
+import '/index.dart';
+import '/main.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/lat_lng.dart';
+import '/flutter_flow/place.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'serialization_util.dart';
 
 export 'package:go_router/go_router.dart';
@@ -21,6 +22,11 @@ export 'serialization_util.dart';
 const kTransitionInfoKey = '__transition_info__';
 
 class AppStateNotifier extends ChangeNotifier {
+  AppStateNotifier._();
+
+  static AppStateNotifier? _instance;
+  static AppStateNotifier get instance => _instance ??= AppStateNotifier._();
+
   BaseAuthUser? initialUser;
   BaseAuthUser? user;
   bool showSplashImage = true;
@@ -48,10 +54,13 @@ class AppStateNotifier extends ChangeNotifier {
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
   void update(BaseAuthUser newUser) {
+    final shouldUpdate =
+        user?.uid == null || newUser.uid == null || user?.uid != newUser.uid;
     initialUser ??= newUser;
     user = newUser;
     // Refresh the app on auth change unless explicitly marked otherwise.
-    if (notifyOnAuthChange) {
+    // No need to update unless the user has changed.
+    if (notifyOnAuthChange && shouldUpdate) {
       notifyListeners();
     }
     // Once again mark the notifier as needing to update on auth change
@@ -69,7 +78,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, _) =>
+      errorBuilder: (context, state) =>
           appStateNotifier.loggedIn ? HomePageWidget() : LoginWidget(),
       routes: [
         FFRoute(
@@ -79,19 +88,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               appStateNotifier.loggedIn ? HomePageWidget() : LoginWidget(),
         ),
         FFRoute(
-          name: 'editProfile',
-          path: '/editProfile',
-          builder: (context, params) => EditProfileWidget(),
-        ),
-        FFRoute(
-          name: 'teamMembersClients',
-          path: '/teamMembersClients',
-          builder: (context, params) => TeamMembersClientsWidget(),
-        ),
-        FFRoute(
-          name: 'login',
-          path: '/login',
-          builder: (context, params) => LoginWidget(),
+          name: 'requisitosInstalacion',
+          path: '/requisitosInstalacion',
+          builder: (context, params) => RequisitosInstalacionWidget(),
         ),
         FFRoute(
           name: 'forgothPassword',
@@ -99,31 +98,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => ForgothPasswordWidget(),
         ),
         FFRoute(
+          name: 'login',
+          path: '/login',
+          builder: (context, params) => LoginWidget(),
+        ),
+        FFRoute(
+          name: 'SearchTickets',
+          path: '/searchTickets',
+          requireAuth: true,
+          builder: (context, params) => SearchTicketsWidget(),
+        ),
+        FFRoute(
           name: 'createAcoount',
           path: '/createAcoount',
           builder: (context, params) => CreateAcoountWidget(),
         ),
         FFRoute(
-          name: 'SearchTickets',
-          path: '/searchTickets',
-          builder: (context, params) => SearchTicketsWidget(),
-        ),
-        FFRoute(
           name: 'HomePage',
           path: '/homePage',
+          requireAuth: true,
           builder: (context, params) => HomePageWidget(),
-        ),
-        FFRoute(
-          name: 'installationRequirement',
-          path: '/installationRequirement',
-          builder: (context, params) => InstallationRequirementWidget(
-            product: params.getParam('product', ParamType.JSON),
-          ),
-        ),
-        FFRoute(
-          name: 'validateIdentity',
-          path: '/validateIdentity',
-          builder: (context, params) => ValidateIdentityWidget(),
         ),
         FFRoute(
           name: 'setClienteIndividual',
@@ -133,31 +127,49 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'ticketStatus',
-          path: '/ticketStatus',
-          builder: (context, params) => TicketStatusWidget(),
-        ),
-        FFRoute(
-          name: 'informationTicket',
-          path: '/informationTicket',
-          builder: (context, params) => InformationTicketWidget(
-            ticket: params.getParam('ticket', ParamType.JSON),
-          ),
+          name: 'validateIdentity',
+          path: '/validateIdentity',
+          builder: (context, params) => ValidateIdentityWidget(),
         ),
         FFRoute(
           name: 'selectDamage',
           path: '/selectDamage',
-          builder: (context, params) => SelectDamageWidget(),
+          builder: (context, params) => SelectDamageWidget(
+            user: params.getParam('user', ParamType.JSON),
+          ),
         ),
         FFRoute(
-          name: 'selectDate',
-          path: '/selectDate',
-          builder: (context, params) => SelectDateWidget(),
+          name: 'installationRequirement',
+          path: '/installationRequirement',
+          builder: (context, params) => InstallationRequirementWidget(
+            product: params.getParam('product', ParamType.JSON),
+            requerimientos: params.getParam('requerimientos', ParamType.JSON),
+          ),
         ),
         FFRoute(
           name: 'SuccessTicketCreate',
           path: '/successTicketCreate',
           builder: (context, params) => SuccessTicketCreateWidget(),
+        ),
+        FFRoute(
+          name: 'selectDate',
+          path: '/selectDate',
+          builder: (context, params) => SelectDateWidget(
+            ticketInformation:
+                params.getParam('ticketInformation', ParamType.JSON),
+          ),
+        ),
+        FFRoute(
+          name: 'DetailsServices',
+          path: '/detailsServices',
+          builder: (context, params) => DetailsServicesWidget(
+            product: params.getParam('product', ParamType.JSON),
+          ),
+        ),
+        FFRoute(
+          name: 'searchProduct',
+          path: '/searchProduct',
+          builder: (context, params) => SearchProductWidget(),
         ),
         FFRoute(
           name: 'EditProfileAdmin',
@@ -168,31 +180,86 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'createTicket',
-          path: '/createTicket',
-          builder: (context, params) => CreateTicketWidget(),
-        ),
-        FFRoute(
-          name: 'DetailsServices',
-          path: '/detailsServices',
-          builder: (context, params) => DetailsServicesWidget(
-            product: params.getParam('product', ParamType.JSON),
-          ),
-        ),
-        FFRoute(
-          name: 'createAcoountAsesores',
-          path: '/createAcoountAsesores',
-          builder: (context, params) => CreateAcoountAsesoresWidget(),
-        ),
-        FFRoute(
           name: 'setClienteOrganizacion',
           path: '/setClienteOrganizacion',
           builder: (context, params) => SetClienteOrganizacionWidget(
             userIndurama: params.getParam('userIndurama', ParamType.JSON),
           ),
+        ),
+        FFRoute(
+          name: 'ticketDetails',
+          path: '/confirm/:ticket',
+          builder: (context, params) => TicketDetailsWidget(
+            ticket: params.getParam('ticket', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'createIndividualPortal',
+          path: '/createIndividualPortal',
+          builder: (context, params) => CreateIndividualPortalWidget(
+            userDataBook: params.getParam('userDataBook', ParamType.JSON),
+          ),
+        ),
+        FFRoute(
+          name: 'createOrganizationPortal',
+          path: '/createOrganizationPortal',
+          builder: (context, params) => CreateOrganizationPortalWidget(
+            userDataBook: params.getParam('userDataBook', ParamType.JSON),
+          ),
+        ),
+        FFRoute(
+          name: 'selectClientIndividual',
+          path: '/selectClientIndividual',
+          builder: (context, params) => SelectClientIndividualWidget(
+            clients: params.getParam('clients', ParamType.JSON),
+            client: params.getParam('client', ParamType.bool),
+            cedula: params.getParam('cedula', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'teamMembersClients',
+          path: '/teamMembersClients',
+          requireAuth: true,
+          builder: (context, params) => TeamMembersClientsWidget(),
+        ),
+        FFRoute(
+          name: 'createRequeriments',
+          path: '/createRequeriments',
+          asyncParams: {
+            'requerimiento': getDoc(['requerimientosInstalacion'],
+                RequerimientosInstalacionRecord.fromSnapshot),
+          },
+          builder: (context, params) => CreateRequerimentsWidget(
+            requerimiento: params.getParam('requerimiento', ParamType.Document),
+          ),
+        ),
+        FFRoute(
+          name: 'searchUsers',
+          path: '/searchUsers',
+          builder: (context, params) => SearchUsersWidget(),
+        ),
+        FFRoute(
+          name: 'searchRequeriments',
+          path: '/searchRequeriments',
+          builder: (context, params) => SearchRequerimentsWidget(),
+        ),
+        FFRoute(
+          name: 'SuccessTicketIndurama',
+          path: '/successTicketIndurama',
+          builder: (context, params) => SuccessTicketInduramaWidget(
+            ticket: params.getParam('ticket', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'selectClientOrganizacion',
+          path: '/selectClientOrganizacion',
+          builder: (context, params) => SelectClientOrganizacionWidget(
+            clients: params.getParam('clients', ParamType.JSON),
+            client: params.getParam('client', ParamType.bool),
+            cedula: params.getParam('cedula', ParamType.String),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
-      urlPathStrategy: UrlPathStrategy.path,
     );
 
 extension NavParamExtensions on Map<String, String?> {
@@ -207,8 +274,8 @@ extension NavigationExtensions on BuildContext {
   void goNamedAuth(
     String name,
     bool mounted, {
-    Map<String, String> params = const <String, String>{},
-    Map<String, String> queryParams = const <String, String>{},
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, String> queryParameters = const <String, String>{},
     Object? extra,
     bool ignoreRedirect = false,
   }) =>
@@ -216,16 +283,16 @@ extension NavigationExtensions on BuildContext {
           ? null
           : goNamed(
               name,
-              params: params,
-              queryParams: queryParams,
+              pathParameters: pathParameters,
+              queryParameters: queryParameters,
               extra: extra,
             );
 
   void pushNamedAuth(
     String name,
     bool mounted, {
-    Map<String, String> params = const <String, String>{},
-    Map<String, String> queryParams = const <String, String>{},
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, String> queryParameters = const <String, String>{},
     Object? extra,
     bool ignoreRedirect = false,
   }) =>
@@ -233,25 +300,24 @@ extension NavigationExtensions on BuildContext {
           ? null
           : pushNamed(
               name,
-              params: params,
-              queryParams: queryParams,
+              pathParameters: pathParameters,
+              queryParameters: queryParameters,
               extra: extra,
             );
 
   void safePop() {
     // If there is only one route on the stack, navigate to the initial
     // page instead of popping.
-    if (GoRouter.of(this).routerDelegate.matches.length <= 1) {
-      go('/');
-    } else {
+    if (canPop()) {
       pop();
+    } else {
+      go('/');
     }
   }
 }
 
 extension GoRouterExtensions on GoRouter {
-  AppStateNotifier get appState =>
-      (routerDelegate.refreshListenable as AppStateNotifier);
+  AppStateNotifier get appState => AppStateNotifier.instance;
   void prepareAuthEvent([bool ignoreRedirect = false]) =>
       appState.hasRedirect() && !ignoreRedirect
           ? null
@@ -260,16 +326,15 @@ extension GoRouterExtensions on GoRouter {
       !ignoreRedirect && appState.hasRedirect();
   void clearRedirectLocation() => appState.clearRedirectLocation();
   void setRedirectLocationIfUnset(String location) =>
-      (routerDelegate.refreshListenable as AppStateNotifier)
-          .updateNotifyOnAuthChange(false);
+      appState.updateNotifyOnAuthChange(false);
 }
 
 extension _GoRouterStateExtensions on GoRouterState {
   Map<String, dynamic> get extraMap =>
       extra != null ? extra as Map<String, dynamic> : {};
   Map<String, dynamic> get allParams => <String, dynamic>{}
-    ..addAll(params)
-    ..addAll(queryParams)
+    ..addAll(pathParameters)
+    ..addAll(queryParameters)
     ..addAll(extraMap);
   TransitionInfo get transitionInfo => extraMap.containsKey(kTransitionInfoKey)
       ? extraMap[kTransitionInfoKey] as TransitionInfo
@@ -350,7 +415,7 @@ class FFRoute {
   GoRoute toRoute(AppStateNotifier appStateNotifier) => GoRoute(
         name: name,
         path: path,
-        redirect: (state) {
+        redirect: (context, state) {
           if (appStateNotifier.shouldRedirect) {
             final redirectLocation = appStateNotifier.getRedirectLocation();
             appStateNotifier.clearRedirectLocation();
@@ -372,13 +437,11 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      color: FlutterFlowTheme.of(context).primary,
-                    ),
+              ? Container(
+                  color: FlutterFlowTheme.of(context).primaryBtnText,
+                  child: Image.asset(
+                    'assets/images/appicon.png',
+                    fit: BoxFit.contain,
                   ),
                 )
               : page;

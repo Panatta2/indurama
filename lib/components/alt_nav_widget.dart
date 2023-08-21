@@ -211,7 +211,7 @@ class _AltNavWidgetState extends State<AltNavWidget> {
                         highlightColor: Colors.transparent,
                         onTap: () async {
                           context.pushNamed(
-                            'editProfile',
+                            'requisitosInstalacion',
                             extra: <String, dynamic>{
                               kTransitionInfoKey: TransitionInfo(
                                 hasTransition: true,
@@ -492,7 +492,7 @@ class _AltNavWidgetState extends State<AltNavWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        'editProfile',
+                        'requisitosInstalacion',
                         extra: <String, dynamic>{
                           kTransitionInfoKey: TransitionInfo(
                             hasTransition: true,

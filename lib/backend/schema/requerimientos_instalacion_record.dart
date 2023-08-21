@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
 import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
@@ -14,101 +16,96 @@ class RequerimientosInstalacionRecord extends FirestoreRecord {
     _initializeFields();
   }
 
-  // "Linea" field.
-  String? _linea;
-  String get linea => _linea ?? '';
-  bool hasLinea() => _linea != null;
+  // "CATEGORIA" field.
+  String? _categoria;
+  String get categoria => _categoria ?? '';
+  bool hasCategoria() => _categoria != null;
 
-  // "Producto" field.
+  // "PRODUCTO" field.
   String? _producto;
   String get producto => _producto ?? '';
   bool hasProducto() => _producto != null;
 
-  // "Modelo" field.
+  // "MODELO" field.
   String? _modelo;
   String get modelo => _modelo ?? '';
   bool hasModelo() => _modelo != null;
 
-  // "Proveedor" field.
-  String? _proveedor;
-  String get proveedor => _proveedor ?? '';
-  bool hasProveedor() => _proveedor != null;
+  // "CODIGOS" field.
+  List<String>? _codigos;
+  List<String> get codigos => _codigos ?? const [];
+  bool hasCodigos() => _codigos != null;
 
-  // "Marca" field.
+  // "MARCA" field.
   String? _marca;
   String get marca => _marca ?? '';
   bool hasMarca() => _marca != null;
 
-  // "PeriodoGarantiaGeneral" field.
-  String? _periodoGarantiaGeneral;
-  String get periodoGarantiaGeneral => _periodoGarantiaGeneral ?? '';
-  bool hasPeriodoGarantiaGeneral() => _periodoGarantiaGeneral != null;
+  // "PerodoGarantiaGeneral" field.
+  String? _perodoGarantiaGeneral;
+  String get perodoGarantiaGeneral => _perodoGarantiaGeneral ?? '';
+  bool hasPerodoGarantiaGeneral() => _perodoGarantiaGeneral != null;
 
-  // "GarantiaParticularComponentes" field.
-  String? _garantiaParticularComponentes;
-  String get garantiaParticularComponentes =>
-      _garantiaParticularComponentes ?? '';
-  bool hasGarantiaParticularComponentes() =>
-      _garantiaParticularComponentes != null;
+  // "InstalacionGratuitaUnaVez" field.
+  String? _instalacionGratuitaUnaVez;
+  String get instalacionGratuitaUnaVez => _instalacionGratuitaUnaVez ?? '';
+  bool hasInstalacionGratuitaUnaVez() => _instalacionGratuitaUnaVez != null;
 
-  // "InstalacionGratuita" field.
-  String? _instalacionGratuita;
-  String get instalacionGratuita => _instalacionGratuita ?? '';
-  bool hasInstalacionGratuita() => _instalacionGratuita != null;
-
-  // "RequerimientosInstalacionesBasicosProducto" field.
-  String? _requerimientosInstalacionesBasicosProducto;
-  String get requerimientosInstalacionesBasicosProducto =>
-      _requerimientosInstalacionesBasicosProducto ?? '';
-  bool hasRequerimientosInstalacionesBasicosProducto() =>
-      _requerimientosInstalacionesBasicosProducto != null;
+  // "RequerimientosBasicosInstalacion" field.
+  String? _requerimientosBasicosInstalacion;
+  String get requerimientosBasicosInstalacion =>
+      _requerimientosBasicosInstalacion ?? '';
+  bool hasRequerimientosBasicosInstalacion() =>
+      _requerimientosBasicosInstalacion != null;
 
   // "AtencionDomicilio" field.
   String? _atencionDomicilio;
   String get atencionDomicilio => _atencionDomicilio ?? '';
   bool hasAtencionDomicilio() => _atencionDomicilio != null;
 
+  // "PrestamoProductoReparacionMayor" field.
+  String? _prestamoProductoReparacionMayor;
+  String get prestamoProductoReparacionMayor =>
+      _prestamoProductoReparacionMayor ?? '';
+  bool hasPrestamoProductoReparacionMayor() =>
+      _prestamoProductoReparacionMayor != null;
+
   // "OtrosServicios" field.
   String? _otrosServicios;
   String get otrosServicios => _otrosServicios ?? '';
   bool hasOtrosServicios() => _otrosServicios != null;
 
-  // "Restricciones" field.
+  // "RESTRICCIONES" field.
   String? _restricciones;
   String get restricciones => _restricciones ?? '';
   bool hasRestricciones() => _restricciones != null;
 
-  // "ProductCategoryID" field.
-  String? _productCategoryID;
-  String get productCategoryID => _productCategoryID ?? '';
-  bool hasProductCategoryID() => _productCategoryID != null;
-
-  // "ProductID" field.
-  int? _productID;
-  int get productID => _productID ?? 0;
-  bool hasProductID() => _productID != null;
+  // "CodigoCategoria" field.
+  String? _codigoCategoria;
+  String get codigoCategoria => _codigoCategoria ?? '';
+  bool hasCodigoCategoria() => _codigoCategoria != null;
 
   void _initializeFields() {
-    _linea = snapshotData['Linea'] as String?;
-    _producto = snapshotData['Producto'] as String?;
-    _modelo = snapshotData['Modelo'] as String?;
-    _proveedor = snapshotData['Proveedor'] as String?;
-    _marca = snapshotData['Marca'] as String?;
-    _periodoGarantiaGeneral = snapshotData['PeriodoGarantiaGeneral'] as String?;
-    _garantiaParticularComponentes =
-        snapshotData['GarantiaParticularComponentes'] as String?;
-    _instalacionGratuita = snapshotData['InstalacionGratuita'] as String?;
-    _requerimientosInstalacionesBasicosProducto =
-        snapshotData['RequerimientosInstalacionesBasicosProducto'] as String?;
+    _categoria = snapshotData['CATEGORIA'] as String?;
+    _producto = snapshotData['PRODUCTO'] as String?;
+    _modelo = snapshotData['MODELO'] as String?;
+    _codigos = getDataList(snapshotData['CODIGOS']);
+    _marca = snapshotData['MARCA'] as String?;
+    _perodoGarantiaGeneral = snapshotData['PerodoGarantiaGeneral'] as String?;
+    _instalacionGratuitaUnaVez =
+        snapshotData['InstalacionGratuitaUnaVez'] as String?;
+    _requerimientosBasicosInstalacion =
+        snapshotData['RequerimientosBasicosInstalacion'] as String?;
     _atencionDomicilio = snapshotData['AtencionDomicilio'] as String?;
+    _prestamoProductoReparacionMayor =
+        snapshotData['PrestamoProductoReparacionMayor'] as String?;
     _otrosServicios = snapshotData['OtrosServicios'] as String?;
-    _restricciones = snapshotData['Restricciones'] as String?;
-    _productCategoryID = snapshotData['ProductCategoryID'] as String?;
-    _productID = snapshotData['ProductID'] as int?;
+    _restricciones = snapshotData['RESTRICCIONES'] as String?;
+    _codigoCategoria = snapshotData['CodigoCategoria'] as String?;
   }
 
   static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('RequerimientosInstalacion');
+      FirebaseFirestore.instance.collection('requerimientosInstalacion');
 
   static Stream<RequerimientosInstalacionRecord> getDocument(
           DocumentReference ref) =>
@@ -136,43 +133,92 @@ class RequerimientosInstalacionRecord extends FirestoreRecord {
   @override
   String toString() =>
       'RequerimientosInstalacionRecord(reference: ${reference.path}, data: $snapshotData)';
+
+  @override
+  int get hashCode => reference.path.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is RequerimientosInstalacionRecord &&
+      reference.path.hashCode == other.reference.path.hashCode;
 }
 
 Map<String, dynamic> createRequerimientosInstalacionRecordData({
-  String? linea,
+  String? categoria,
   String? producto,
   String? modelo,
-  String? proveedor,
   String? marca,
-  String? periodoGarantiaGeneral,
-  String? garantiaParticularComponentes,
-  String? instalacionGratuita,
-  String? requerimientosInstalacionesBasicosProducto,
+  String? perodoGarantiaGeneral,
+  String? instalacionGratuitaUnaVez,
+  String? requerimientosBasicosInstalacion,
   String? atencionDomicilio,
+  String? prestamoProductoReparacionMayor,
   String? otrosServicios,
   String? restricciones,
-  String? productCategoryID,
-  int? productID,
+  String? codigoCategoria,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
-      'Linea': linea,
-      'Producto': producto,
-      'Modelo': modelo,
-      'Proveedor': proveedor,
-      'Marca': marca,
-      'PeriodoGarantiaGeneral': periodoGarantiaGeneral,
-      'GarantiaParticularComponentes': garantiaParticularComponentes,
-      'InstalacionGratuita': instalacionGratuita,
-      'RequerimientosInstalacionesBasicosProducto':
-          requerimientosInstalacionesBasicosProducto,
+      'CATEGORIA': categoria,
+      'PRODUCTO': producto,
+      'MODELO': modelo,
+      'MARCA': marca,
+      'PerodoGarantiaGeneral': perodoGarantiaGeneral,
+      'InstalacionGratuitaUnaVez': instalacionGratuitaUnaVez,
+      'RequerimientosBasicosInstalacion': requerimientosBasicosInstalacion,
       'AtencionDomicilio': atencionDomicilio,
+      'PrestamoProductoReparacionMayor': prestamoProductoReparacionMayor,
       'OtrosServicios': otrosServicios,
-      'Restricciones': restricciones,
-      'ProductCategoryID': productCategoryID,
-      'ProductID': productID,
+      'RESTRICCIONES': restricciones,
+      'CodigoCategoria': codigoCategoria,
     }.withoutNulls,
   );
 
   return firestoreData;
+}
+
+class RequerimientosInstalacionRecordDocumentEquality
+    implements Equality<RequerimientosInstalacionRecord> {
+  const RequerimientosInstalacionRecordDocumentEquality();
+
+  @override
+  bool equals(RequerimientosInstalacionRecord? e1,
+      RequerimientosInstalacionRecord? e2) {
+    const listEquality = ListEquality();
+    return e1?.categoria == e2?.categoria &&
+        e1?.producto == e2?.producto &&
+        e1?.modelo == e2?.modelo &&
+        listEquality.equals(e1?.codigos, e2?.codigos) &&
+        e1?.marca == e2?.marca &&
+        e1?.perodoGarantiaGeneral == e2?.perodoGarantiaGeneral &&
+        e1?.instalacionGratuitaUnaVez == e2?.instalacionGratuitaUnaVez &&
+        e1?.requerimientosBasicosInstalacion ==
+            e2?.requerimientosBasicosInstalacion &&
+        e1?.atencionDomicilio == e2?.atencionDomicilio &&
+        e1?.prestamoProductoReparacionMayor ==
+            e2?.prestamoProductoReparacionMayor &&
+        e1?.otrosServicios == e2?.otrosServicios &&
+        e1?.restricciones == e2?.restricciones &&
+        e1?.codigoCategoria == e2?.codigoCategoria;
+  }
+
+  @override
+  int hash(RequerimientosInstalacionRecord? e) => const ListEquality().hash([
+        e?.categoria,
+        e?.producto,
+        e?.modelo,
+        e?.codigos,
+        e?.marca,
+        e?.perodoGarantiaGeneral,
+        e?.instalacionGratuitaUnaVez,
+        e?.requerimientosBasicosInstalacion,
+        e?.atencionDomicilio,
+        e?.prestamoProductoReparacionMayor,
+        e?.otrosServicios,
+        e?.restricciones,
+        e?.codigoCategoria
+      ]);
+
+  @override
+  bool isValidKey(Object? o) => o is RequerimientosInstalacionRecord;
 }

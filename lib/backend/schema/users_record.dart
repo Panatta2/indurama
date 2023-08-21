@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
 import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
@@ -39,11 +41,6 @@ class UsersRecord extends FirestoreRecord {
   DocumentReference? get roleId => _roleId;
   bool hasRoleId() => _roleId != null;
 
-  // "codena_id" field.
-  DocumentReference? _codenaId;
-  DocumentReference? get codenaId => _codenaId;
-  bool hasCodenaId() => _codenaId != null;
-
   // "photo_url" field.
   String? _photoUrl;
   String get photoUrl => _photoUrl ?? '';
@@ -54,15 +51,20 @@ class UsersRecord extends FirestoreRecord {
   String get phoneNumber => _phoneNumber ?? '';
   bool hasPhoneNumber() => _phoneNumber != null;
 
+  // "cadena" field.
+  String? _cadena;
+  String get cadena => _cadena ?? '';
+  bool hasCadena() => _cadena != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
     _uid = snapshotData['uid'] as String?;
     _createdTime = snapshotData['created_time'] as DateTime?;
     _roleId = snapshotData['role_id'] as DocumentReference?;
-    _codenaId = snapshotData['codena_id'] as DocumentReference?;
     _photoUrl = snapshotData['photo_url'] as String?;
     _phoneNumber = snapshotData['phone_number'] as String?;
+    _cadena = snapshotData['cadena'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -88,6 +90,14 @@ class UsersRecord extends FirestoreRecord {
   @override
   String toString() =>
       'UsersRecord(reference: ${reference.path}, data: $snapshotData)';
+
+  @override
+  int get hashCode => reference.path.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is UsersRecord &&
+      reference.path.hashCode == other.reference.path.hashCode;
 }
 
 Map<String, dynamic> createUsersRecordData({
@@ -96,9 +106,9 @@ Map<String, dynamic> createUsersRecordData({
   String? uid,
   DateTime? createdTime,
   DocumentReference? roleId,
-  DocumentReference? codenaId,
   String? photoUrl,
   String? phoneNumber,
+  String? cadena,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -107,11 +117,42 @@ Map<String, dynamic> createUsersRecordData({
       'uid': uid,
       'created_time': createdTime,
       'role_id': roleId,
-      'codena_id': codenaId,
       'photo_url': photoUrl,
       'phone_number': phoneNumber,
+      'cadena': cadena,
     }.withoutNulls,
   );
 
   return firestoreData;
+}
+
+class UsersRecordDocumentEquality implements Equality<UsersRecord> {
+  const UsersRecordDocumentEquality();
+
+  @override
+  bool equals(UsersRecord? e1, UsersRecord? e2) {
+    return e1?.email == e2?.email &&
+        e1?.displayName == e2?.displayName &&
+        e1?.uid == e2?.uid &&
+        e1?.createdTime == e2?.createdTime &&
+        e1?.roleId == e2?.roleId &&
+        e1?.photoUrl == e2?.photoUrl &&
+        e1?.phoneNumber == e2?.phoneNumber &&
+        e1?.cadena == e2?.cadena;
+  }
+
+  @override
+  int hash(UsersRecord? e) => const ListEquality().hash([
+        e?.email,
+        e?.displayName,
+        e?.uid,
+        e?.createdTime,
+        e?.roleId,
+        e?.photoUrl,
+        e?.phoneNumber,
+        e?.cadena
+      ]);
+
+  @override
+  bool isValidKey(Object? o) => o is UsersRecord;
 }

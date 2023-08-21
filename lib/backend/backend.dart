@@ -7,8 +7,8 @@ import 'schema/util/firestore_util.dart';
 
 import 'schema/messages_record.dart';
 import 'schema/roles_record.dart';
-import 'schema/cadenas_record.dart';
 import 'schema/users_record.dart';
+import 'schema/tickets_record.dart';
 import 'schema/requerimientos_instalacion_record.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -19,8 +19,8 @@ export 'schema/util/schema_util.dart';
 
 export 'schema/messages_record.dart';
 export 'schema/roles_record.dart';
-export 'schema/cadenas_record.dart';
 export 'schema/users_record.dart';
+export 'schema/tickets_record.dart';
 export 'schema/requerimientos_instalacion_record.dart';
 
 /// Functions to query MessagesRecords (as a Stream and as a Future).
@@ -60,21 +60,6 @@ Future<List<MessagesRecord>> queryMessagesRecordOnce({
       singleRecord: singleRecord,
     );
 
-Future<FFFirestorePage<MessagesRecord>> queryMessagesRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      MessagesRecord.collection,
-      MessagesRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
 /// Functions to query RolesRecords (as a Stream and as a Future).
 Future<int> queryRolesRecordCount({
   Query Function(Query)? queryBuilder,
@@ -110,73 +95,6 @@ Future<List<RolesRecord>> queryRolesRecordOnce({
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<RolesRecord>> queryRolesRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      RolesRecord.collection,
-      RolesRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query CadenasRecords (as a Stream and as a Future).
-Future<int> queryCadenasRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      CadenasRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<CadenasRecord>> queryCadenasRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      CadenasRecord.collection,
-      CadenasRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<CadenasRecord>> queryCadenasRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      CadenasRecord.collection,
-      CadenasRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<CadenasRecord>> queryCadenasRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      CadenasRecord.collection,
-      CadenasRecord.fromSnapshot,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
     );
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
@@ -216,19 +134,41 @@ Future<List<UsersRecord>> queryUsersRecordOnce({
       singleRecord: singleRecord,
     );
 
-Future<FFFirestorePage<UsersRecord>> queryUsersRecordPage({
+/// Functions to query TicketsRecords (as a Stream and as a Future).
+Future<int> queryTicketsRecordCount({
   Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
+  int limit = -1,
 }) =>
-    queryCollectionPage(
-      UsersRecord.collection,
-      UsersRecord.fromSnapshot,
+    queryCollectionCount(
+      TicketsRecord.collection,
       queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
+      limit: limit,
+    );
+
+Stream<List<TicketsRecord>> queryTicketsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      TicketsRecord.collection,
+      TicketsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<TicketsRecord>> queryTicketsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      TicketsRecord.collection,
+      TicketsRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
     );
 
 /// Functions to query RequerimientosInstalacionRecords (as a Stream and as a Future).
@@ -268,22 +208,6 @@ Future<List<RequerimientosInstalacionRecord>>
           queryBuilder: queryBuilder,
           limit: limit,
           singleRecord: singleRecord,
-        );
-
-Future<FFFirestorePage<RequerimientosInstalacionRecord>>
-    queryRequerimientosInstalacionRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-        queryCollectionPage(
-          RequerimientosInstalacionRecord.collection,
-          RequerimientosInstalacionRecord.fromSnapshot,
-          queryBuilder: queryBuilder,
-          nextPageMarker: nextPageMarker,
-          pageSize: pageSize,
-          isStream: isStream,
         );
 
 Future<int> queryCollectionCount(
@@ -432,4 +356,9 @@ Future maybeCreateUser(User user) async {
 
   await userRecord.set(userData);
   currentUserDocument = UsersRecord.getDocumentFromData(userData, userRecord);
+}
+
+Future updateUserDocument({String? email}) async {
+  await currentUserDocument?.reference
+      .update(createUsersRecordData(email: email));
 }

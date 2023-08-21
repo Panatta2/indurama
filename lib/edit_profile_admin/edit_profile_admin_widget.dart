@@ -92,7 +92,7 @@ class _EditProfileAdminWidgetState extends State<EditProfileAdminWidget> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 1.0, 0.0, 0.0),
               child: Container(
-                width: MediaQuery.of(context).size.width * 1.0,
+                width: MediaQuery.sizeOf(context).width * 1.0,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                   boxShadow: [
@@ -116,7 +116,9 @@ class _EditProfileAdminWidgetState extends State<EditProfileAdminWidget> {
                             width: 50.0,
                             height: 50.0,
                             child: CircularProgressIndicator(
-                              color: FlutterFlowTheme.of(context).primary,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                FlutterFlowTheme.of(context).primary,
+                              ),
                             ),
                           ),
                         );
@@ -296,24 +298,11 @@ class _EditProfileAdminWidgetState extends State<EditProfileAdminWidget> {
                               options: ['Activo', 'Inactivo'],
                               onChanged: (val) =>
                                   setState(() => _model.dropDownValue = val),
-                              width: MediaQuery.of(context).size.width * 1.0,
+                              width: MediaQuery.sizeOf(context).width * 1.0,
                               height: 50.0,
-                              searchHintTextStyle: FlutterFlowTheme.of(context)
-                                  .bodyLarge
-                                  .override(
-                                    fontFamily: FlutterFlowTheme.of(context)
-                                        .bodyLargeFamily,
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(
-                                            FlutterFlowTheme.of(context)
-                                                .bodyLargeFamily),
-                                  ),
                               textStyle:
                                   FlutterFlowTheme.of(context).bodyMedium,
                               hintText: 'Estado del usuario.',
-                              searchHintText: 'Search for an item...',
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
                               elevation: 2.0,
@@ -325,6 +314,7 @@ class _EditProfileAdminWidgetState extends State<EditProfileAdminWidget> {
                                   12.0, 4.0, 12.0, 4.0),
                               hidesUnderline: true,
                               isSearchable: false,
+                              isMultiSelect: false,
                             ),
                           ),
                           Padding(

@@ -62,7 +62,6 @@ class _MobileNavWidgetState extends State<MobileNavWidget> {
       ),
       child: Container(
         width: double.infinity,
-        height: 100.0,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           boxShadow: [
@@ -74,50 +73,11 @@ class _MobileNavWidgetState extends State<MobileNavWidget> {
           ],
         ),
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 34.0),
+          padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              if (FFAppState().role != 'asesorCadena')
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
-                    child: InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        context.pushNamed(
-                          'teamMembersClients',
-                          extra: <String, dynamic>{
-                            kTransitionInfoKey: TransitionInfo(
-                              hasTransition: true,
-                              transitionType: PageTransitionType.fade,
-                              duration: Duration(milliseconds: 0),
-                            ),
-                          },
-                        );
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          widget.navFourIcon!,
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 8.0, 0.0, 0.0),
-                            child: Text(
-                              'Usuarios',
-                              style: FlutterFlowTheme.of(context).bodySmall,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
               Expanded(
                 child: InkWell(
                   splashColor: Colors.transparent,
@@ -141,21 +101,16 @@ class _MobileNavWidgetState extends State<MobileNavWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       widget.navOneIcon!,
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-                        child: Text(
-                          'Inicio',
-                          style: FlutterFlowTheme.of(context).bodySmall,
-                        ),
+                      Text(
+                        'Tickets',
+                        style: FlutterFlowTheme.of(context).bodySmall,
                       ),
                     ],
                   ),
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
+              if (FFAppState().role != 'asesorCadena')
+                Expanded(
                   child: InkWell(
                     splashColor: Colors.transparent,
                     focusColor: Colors.transparent,
@@ -163,7 +118,7 @@ class _MobileNavWidgetState extends State<MobileNavWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        'SearchTickets',
+                        'teamMembersClients',
                         extra: <String, dynamic>{
                           kTransitionInfoKey: TransitionInfo(
                             hasTransition: true,
@@ -177,23 +132,17 @@ class _MobileNavWidgetState extends State<MobileNavWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        widget.navFiveIcon!,
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 8.0, 0.0, 0.0),
-                          child: Text(
-                            'Tickets',
-                            style: FlutterFlowTheme.of(context).bodySmall,
-                          ),
+                        widget.navFourIcon!,
+                        Text(
+                          'Usuarios',
+                          style: FlutterFlowTheme.of(context).bodySmall,
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
+              if (FFAppState().role == 'admin')
+                Expanded(
                   child: InkWell(
                     splashColor: Colors.transparent,
                     focusColor: Colors.transparent,
@@ -201,7 +150,7 @@ class _MobileNavWidgetState extends State<MobileNavWidget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        'editProfile',
+                        'requisitosInstalacion',
                         extra: <String, dynamic>{
                           kTransitionInfoKey: TransitionInfo(
                             hasTransition: true,
@@ -216,19 +165,14 @@ class _MobileNavWidgetState extends State<MobileNavWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         widget.navThreeIcon!,
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 8.0, 0.0, 0.0),
-                          child: Text(
-                            'Edit User',
-                            style: FlutterFlowTheme.of(context).bodySmall,
-                          ),
+                        Text(
+                          'Requerimientos',
+                          style: FlutterFlowTheme.of(context).bodySmall,
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class SetClienteOrganizacionModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
+  final unfocusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   // State field(s) for userName widget.
   TextEditingController? userNameController;
@@ -31,6 +32,7 @@ class SetClienteOrganizacionModel extends FlutterFlowModel {
   void initState(BuildContext context) {}
 
   void dispose() {
+    unfocusNode.dispose();
     userNameController?.dispose();
     emailAddressController?.dispose();
     titleRoleController1?.dispose();
@@ -38,6 +40,7 @@ class SetClienteOrganizacionModel extends FlutterFlowModel {
     titleRoleController3?.dispose();
   }
 
-  /// Additional helper methods are added here.
+  /// Action blocks are added here.
 
+  /// Additional helper methods are added here.
 }

@@ -50,6 +50,14 @@ class MessageStruct extends FFFirebaseStruct {
 
   @override
   String toString() => 'MessageStruct(${toMap()})';
+
+  @override
+  bool operator ==(Object other) {
+    return other is MessageStruct && message == other.message;
+  }
+
+  @override
+  int get hashCode => const ListEquality().hash([message]);
 }
 
 MessageStruct createMessageStruct({
@@ -70,53 +78,62 @@ MessageStruct createMessageStruct({
     );
 
 MessageStruct? updateMessageStruct(
-  MessageStruct? message, {
+  MessageStruct? messageStruct, {
   bool clearUnsetFields = true,
+  bool create = false,
 }) =>
-    message
-      ?..firestoreUtilData =
-          FirestoreUtilData(clearUnsetFields: clearUnsetFields);
+    messageStruct
+      ?..firestoreUtilData = FirestoreUtilData(
+        clearUnsetFields: clearUnsetFields,
+        create: create,
+      );
 
 void addMessageStructData(
   Map<String, dynamic> firestoreData,
-  MessageStruct? message,
+  MessageStruct? messageStruct,
   String fieldName, [
   bool forFieldValue = false,
 ]) {
   firestoreData.remove(fieldName);
-  if (message == null) {
+  if (messageStruct == null) {
     return;
   }
-  if (message.firestoreUtilData.delete) {
+  if (messageStruct.firestoreUtilData.delete) {
     firestoreData[fieldName] = FieldValue.delete();
     return;
   }
-  if (!forFieldValue && message.firestoreUtilData.clearUnsetFields) {
+  final clearFields =
+      !forFieldValue && messageStruct.firestoreUtilData.clearUnsetFields;
+  if (clearFields) {
     firestoreData[fieldName] = <String, dynamic>{};
   }
-  final messageData = getMessageFirestoreData(message, forFieldValue);
-  final nestedData = messageData.map((k, v) => MapEntry('$fieldName.$k', v));
+  final messageStructData =
+      getMessageFirestoreData(messageStruct, forFieldValue);
+  final nestedData =
+      messageStructData.map((k, v) => MapEntry('$fieldName.$k', v));
 
-  final create = message.firestoreUtilData.create;
-  firestoreData.addAll(create ? mergeNestedFields(nestedData) : nestedData);
+  final mergeFields = messageStruct.firestoreUtilData.create || clearFields;
+  firestoreData
+      .addAll(mergeFields ? mergeNestedFields(nestedData) : nestedData);
 }
 
 Map<String, dynamic> getMessageFirestoreData(
-  MessageStruct? message, [
+  MessageStruct? messageStruct, [
   bool forFieldValue = false,
 ]) {
-  if (message == null) {
+  if (messageStruct == null) {
     return {};
   }
-  final firestoreData = mapToFirestore(message.toMap());
+  final firestoreData = mapToFirestore(messageStruct.toMap());
 
   // Add any Firestore field values
-  message.firestoreUtilData.fieldValues.forEach((k, v) => firestoreData[k] = v);
+  messageStruct.firestoreUtilData.fieldValues
+      .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;
 }
 
 List<Map<String, dynamic>> getMessageListFirestoreData(
-  List<MessageStruct>? messages,
+  List<MessageStruct>? messageStructs,
 ) =>
-    messages?.map((e) => getMessageFirestoreData(e, true)).toList() ?? [];
+    messageStructs?.map((e) => getMessageFirestoreData(e, true)).toList() ?? [];

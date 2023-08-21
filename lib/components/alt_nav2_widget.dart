@@ -219,7 +219,7 @@ class _AltNav2WidgetState extends State<AltNav2Widget> {
                     highlightColor: Colors.transparent,
                     onTap: () async {
                       context.pushNamed(
-                        'editProfile',
+                        'requisitosInstalacion',
                         extra: <String, dynamic>{
                           kTransitionInfoKey: TransitionInfo(
                             hasTransition: true,

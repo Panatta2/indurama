@@ -1,3 +1,5 @@
+import '/backend/api_requests/api_calls.dart';
+import '/components/btn_cancelar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -73,7 +75,13 @@ class _DetailsServicesWidgetState extends State<DetailsServicesWidget> {
                     .containsKey(FlutterFlowTheme.of(context).titleSmallFamily),
               ),
         ),
-        actions: [],
+        actions: [
+          wrapWithModel(
+            model: _model.btnCancelarModel,
+            updateCallback: () => setState(() {}),
+            child: BtnCancelarWidget(),
+          ),
+        ],
         centerTitle: false,
         elevation: 1.0,
       ),
@@ -86,8 +94,8 @@ class _DetailsServicesWidgetState extends State<DetailsServicesWidget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  height: 140.0,
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: 160.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).primary,
                     boxShadow: [
@@ -147,7 +155,7 @@ class _DetailsServicesWidgetState extends State<DetailsServicesWidget> {
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              20.0, 0.0, 20.0, 0.0),
+                              20.0, 0.0, 20.0, 10.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -234,7 +242,7 @@ class _DetailsServicesWidgetState extends State<DetailsServicesWidget> {
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              20.0, 8.0, 20.0, 0.0),
+                              20.0, 10.0, 20.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,7 +299,7 @@ class _DetailsServicesWidgetState extends State<DetailsServicesWidget> {
                   ),
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 15.0),
+                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 12.0),
                     child: Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -524,24 +532,65 @@ class _DetailsServicesWidgetState extends State<DetailsServicesWidget> {
                               );
                             } else {
                               if (FFAppState().selectInstalacion == true) {
-                                context.pushNamed(
-                                  'installationRequirement',
-                                  queryParams: {
-                                    'product': serializeParam(
-                                      getJsonField(
-                                        widget.product,
-                                        r'''$''',
-                                      ),
-                                      ParamType.JSON,
-                                    ),
-                                  }.withoutNulls,
+                                _model.getRequerimientos =
+                                    await GetRequerimientosCall.call(
+                                  id: getJsonField(
+                                    widget.product,
+                                    r'''$.ProductID''',
+                                  ).toString(),
+                                  codigoCategoria: getJsonField(
+                                    widget.product,
+                                    r'''$.ProductCategoryID''',
+                                  ).toString(),
                                 );
+                                if ((_model.getRequerimientos?.succeeded ??
+                                    true)) {
+                                  context.pushNamed(
+                                    'installationRequirement',
+                                    queryParameters: {
+                                      'product': serializeParam(
+                                        getJsonField(
+                                          widget.product,
+                                          r'''$''',
+                                        ),
+                                        ParamType.JSON,
+                                      ),
+                                      'requerimientos': serializeParam(
+                                        getJsonField(
+                                          (_model.getRequerimientos?.jsonBody ??
+                                              ''),
+                                          r'''$''',
+                                        ),
+                                        ParamType.JSON,
+                                      ),
+                                    }.withoutNulls,
+                                  );
+                                } else {
+                                  context.pushNamed(
+                                    'installationRequirement',
+                                    queryParameters: {
+                                      'product': serializeParam(
+                                        getJsonField(
+                                          widget.product,
+                                          r'''$''',
+                                        ),
+                                        ParamType.JSON,
+                                      ),
+                                      'requerimientos': serializeParam(
+                                        null,
+                                        ParamType.JSON,
+                                      ),
+                                    }.withoutNulls,
+                                  );
+                                }
                               } else {
                                 if (FFAppState().selectReparacion == true) {
                                   context.pushNamed('validateIdentity');
                                 }
                               }
                             }
+
+                            setState(() {});
                           },
                           text: 'Solicitar servicio',
                           options: FFButtonOptions(

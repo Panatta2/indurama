@@ -10,18 +10,21 @@ import 'package:provider/provider.dart';
 class ForgothPasswordModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
-  // State field(s) for phoneNumber widget.
-  TextEditingController? phoneNumberController;
-  String? Function(BuildContext, String?)? phoneNumberControllerValidator;
+  final unfocusNode = FocusNode();
+  // State field(s) for email widget.
+  TextEditingController? emailController;
+  String? Function(BuildContext, String?)? emailControllerValidator;
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}
 
   void dispose() {
-    phoneNumberController?.dispose();
+    unfocusNode.dispose();
+    emailController?.dispose();
   }
 
-  /// Additional helper methods are added here.
+  /// Action blocks are added here.
 
+  /// Additional helper methods are added here.
 }

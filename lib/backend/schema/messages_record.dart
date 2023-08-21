@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
 import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
@@ -53,6 +55,14 @@ class MessagesRecord extends FirestoreRecord {
   @override
   String toString() =>
       'MessagesRecord(reference: ${reference.path}, data: $snapshotData)';
+
+  @override
+  int get hashCode => reference.path.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is MessagesRecord &&
+      reference.path.hashCode == other.reference.path.hashCode;
 }
 
 Map<String, dynamic> createMessagesRecordData({
@@ -67,4 +77,20 @@ Map<String, dynamic> createMessagesRecordData({
   );
 
   return firestoreData;
+}
+
+class MessagesRecordDocumentEquality implements Equality<MessagesRecord> {
+  const MessagesRecordDocumentEquality();
+
+  @override
+  bool equals(MessagesRecord? e1, MessagesRecord? e2) {
+    return e1?.type == e2?.type && e1?.message == e2?.message;
+  }
+
+  @override
+  int hash(MessagesRecord? e) =>
+      const ListEquality().hash([e?.type, e?.message]);
+
+  @override
+  bool isValidKey(Object? o) => o is MessagesRecord;
 }

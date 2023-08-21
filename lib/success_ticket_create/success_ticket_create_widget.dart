@@ -20,7 +20,6 @@ class _SuccessTicketCreateWidgetState extends State<SuccessTicketCreateWidget> {
   late SuccessTicketCreateModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
@@ -34,7 +33,6 @@ class _SuccessTicketCreateWidgetState extends State<SuccessTicketCreateWidget> {
   void dispose() {
     _model.dispose();
 
-    _unfocusNode.dispose();
     super.dispose();
   }
 
@@ -43,7 +41,7 @@ class _SuccessTicketCreateWidgetState extends State<SuccessTicketCreateWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondary,
@@ -101,15 +99,7 @@ class _SuccessTicketCreateWidgetState extends State<SuccessTicketCreateWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 44.0, 0.0, 0.0),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    context.pushNamed(
-                      'HomePage',
-                      extra: <String, dynamic>{
-                        kTransitionInfoKey: TransitionInfo(
-                          hasTransition: true,
-                          transitionType: PageTransitionType.leftToRight,
-                        ),
-                      },
-                    );
+                    context.pushNamed('HomePage');
                   },
                   text: 'Ir al inicio',
                   options: FFButtonOptions(

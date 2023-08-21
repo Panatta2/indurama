@@ -20,14 +20,13 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
   late ForgothPasswordModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ForgothPasswordModel());
 
-    _model.phoneNumberController ??= TextEditingController();
+    _model.emailController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -35,7 +34,6 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
   void dispose() {
     _model.dispose();
 
-    _unfocusNode.dispose();
     super.dispose();
   }
 
@@ -44,65 +42,59 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height * 1.0,
-          decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
-          ),
-          child: Align(
-            alignment: AlignmentDirectional(0.0, 1.0),
+        body: Align(
+          alignment: AlignmentDirectional(0.0, 0.0),
+          child: Container(
+            width: double.infinity,
+            height: MediaQuery.sizeOf(context).height * 1.0,
+            decoration: BoxDecoration(
+              color: FlutterFlowTheme.of(context).secondaryBackground,
+            ),
             child: SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 35.0, 0.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (Theme.of(context).brightness == Brightness.dark)
-                          Image.asset(
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.asset(
                             'assets/images/indurama.webp',
-                            width: 310.0,
-                            height: 200.0,
-                            fit: BoxFit.fitWidth,
-                          ),
-                        if (!(Theme.of(context).brightness == Brightness.dark))
-                          Image.asset(
-                            'assets/images/induramaLogo.png',
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: 200.0,
+                            width: 250.0,
+                            height: 150.0,
                             fit: BoxFit.contain,
                           ),
+                        ),
                       ],
                     ),
                   ),
                   Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                        child: Image.asset(
-                          'assets/images/illi_2@2x.png',
-                          width: 300.0,
-                          height: 270.0,
-                          fit: BoxFit.cover,
-                        ),
+                      Image.asset(
+                        'assets/images/illi_2@2x.png',
+                        width: 300.0,
+                        height: 270.0,
+                        fit: BoxFit.cover,
                       ),
                     ],
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    constraints: BoxConstraints(
+                      maxWidth: 650.0,
+                    ),
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                       boxShadow: [
@@ -112,12 +104,7 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
                           offset: Offset(0.0, -1.0),
                         )
                       ],
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(0.0),
-                        bottomRight: Radius.circular(0.0),
-                        topLeft: Radius.circular(16.0),
-                        topRight: Radius.circular(16.0),
-                      ),
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -151,7 +138,7 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
                               ),
                               Expanded(
                                 child: Text(
-                                  'Ingresar correo electronico para cambiar de contraseña.',
+                                  'Ingresar correo electrónico para cambiar de contraseña.',
                                   style: FlutterFlowTheme.of(context)
                                       .headlineMedium
                                       .override(
@@ -177,13 +164,13 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
                             children: [
                               Expanded(
                                 child: TextFormField(
-                                  controller: _model.phoneNumberController,
+                                  controller: _model.emailController,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelText: 'Email',
                                     labelStyle:
                                         FlutterFlowTheme.of(context).titleSmall,
-                                    hintText: 'Correo electronico.',
+                                    hintText: 'Correo electrónico.',
                                     hintStyle:
                                         FlutterFlowTheme.of(context).bodySmall,
                                     enabledBorder: OutlineInputBorder(
@@ -196,7 +183,8 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x00000000),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
                                         width: 2.0,
                                       ),
                                       borderRadius: BorderRadius.circular(8.0),
@@ -225,8 +213,7 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
                                   style:
                                       FlutterFlowTheme.of(context).titleMedium,
                                   maxLines: null,
-                                  validator: _model
-                                      .phoneNumberControllerValidator
+                                  validator: _model.emailControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -242,8 +229,7 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
                             children: [
                               FFButtonWidget(
                                 onPressed: () async {
-                                  if (_model
-                                      .phoneNumberController.text.isEmpty) {
+                                  if (_model.emailController.text.isEmpty) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
@@ -254,7 +240,7 @@ class _ForgothPasswordWidgetState extends State<ForgothPasswordWidget> {
                                     return;
                                   }
                                   await authManager.resetPassword(
-                                    email: _model.phoneNumberController.text,
+                                    email: _model.emailController.text,
                                     context: context,
                                   );
                                 },

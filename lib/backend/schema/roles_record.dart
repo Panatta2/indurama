@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+
 import '/backend/schema/util/firestore_util.dart';
 import '/backend/schema/util/schema_util.dart';
 
@@ -46,6 +48,14 @@ class RolesRecord extends FirestoreRecord {
   @override
   String toString() =>
       'RolesRecord(reference: ${reference.path}, data: $snapshotData)';
+
+  @override
+  int get hashCode => reference.path.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is RolesRecord &&
+      reference.path.hashCode == other.reference.path.hashCode;
 }
 
 Map<String, dynamic> createRolesRecordData({
@@ -58,4 +68,19 @@ Map<String, dynamic> createRolesRecordData({
   );
 
   return firestoreData;
+}
+
+class RolesRecordDocumentEquality implements Equality<RolesRecord> {
+  const RolesRecordDocumentEquality();
+
+  @override
+  bool equals(RolesRecord? e1, RolesRecord? e2) {
+    return e1?.nombre == e2?.nombre;
+  }
+
+  @override
+  int hash(RolesRecord? e) => const ListEquality().hash([e?.nombre]);
+
+  @override
+  bool isValidKey(Object? o) => o is RolesRecord;
 }

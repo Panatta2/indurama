@@ -15,13 +15,6 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /cadenas/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if false;
-      allow delete: if false;
-    }
-
     match /users/{document} {
       allow create: if request.auth.uid == document;
       allow read: if true;
@@ -29,8 +22,15 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /RequerimientosInstalacion/{document} {
-      allow create: if false;
+    match /tickets/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /requerimientosInstalacion/{document} {
+      allow create: if true;
       allow read: if true;
       allow write: if false;
       allow delete: if false;

@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -7,6 +8,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +26,6 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
   late CreateAcoountModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
@@ -42,7 +43,6 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
   void dispose() {
     _model.dispose();
 
-    _unfocusNode.dispose();
     super.dispose();
   }
 
@@ -51,12 +51,12 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           leading: FlutterFlowIconButton(
             borderColor: Colors.transparent,
@@ -73,11 +73,11 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
             },
           ),
           title: Text(
-            'Crear usuario',
+            'Crear Usuario',
             style: FlutterFlowTheme.of(context).headlineSmall,
           ),
           actions: [],
-          centerTitle: true,
+          centerTitle: false,
           elevation: 0.0,
         ),
         body: SafeArea(
@@ -87,28 +87,15 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Image.asset(
-                      'assets/images/induramaLogo.png',
-                      width: 300.0,
-                      height: 100.0,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
+                        EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 12.0),
                     child: Container(
                       width: double.infinity,
                       constraints: BoxConstraints(
-                        maxWidth: 570.0,
+                        maxWidth: 700.0,
                       ),
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -129,27 +116,11 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                         alignment: AlignmentDirectional(0.0, 0.0),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              24.0, 24.0, 24.0, 24.0),
+                              12.0, 12.0, 12.0, 12.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Añadir nuevo usuario',
-                                textAlign: TextAlign.start,
-                                style:
-                                    FlutterFlowTheme.of(context).displaySmall,
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 12.0, 0.0, 24.0),
-                                child: Text(
-                                  'Crear cuenta del provedor ',
-                                  textAlign: TextAlign.start,
-                                  style:
-                                      FlutterFlowTheme.of(context).labelLarge,
-                                ),
-                              ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 16.0),
@@ -161,7 +132,7 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                     autofillHints: [AutofillHints.email],
                                     obscureText: false,
                                     decoration: InputDecoration(
-                                      labelText: 'Correo electronico',
+                                      labelText: 'Correo electrónico',
                                       labelStyle: FlutterFlowTheme.of(context)
                                           .labelLarge,
                                       enabledBorder: OutlineInputBorder(
@@ -295,9 +266,11 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                             width: 50.0,
                                             height: 50.0,
                                             child: CircularProgressIndicator(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
                                             ),
                                           ),
                                         );
@@ -320,30 +293,12 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                           );
                                         },
                                         width:
-                                            MediaQuery.of(context).size.width *
+                                            MediaQuery.sizeOf(context).width *
                                                 1.0,
                                         height: 60.0,
-                                        searchHintTextStyle: FlutterFlowTheme
-                                                .of(context)
-                                            .bodyLarge
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyLargeFamily,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyLargeFamily),
-                                            ),
                                         textStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                         hintText: 'Tipo de usuario.',
-                                        searchHintText: 'Search for an item...',
                                         fillColor: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                         elevation: 2.0,
@@ -356,6 +311,7 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                             12.0, 4.0, 12.0, 4.0),
                                         hidesUnderline: true,
                                         isSearchable: false,
+                                        isMultiSelect: false,
                                       );
                                     },
                                   ),
@@ -378,9 +334,11 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                             width: 50.0,
                                             height: 50.0,
                                             child: CircularProgressIndicator(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
                                             ),
                                           ),
                                         );
@@ -403,30 +361,12 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                           );
                                         },
                                         width:
-                                            MediaQuery.of(context).size.width *
+                                            MediaQuery.sizeOf(context).width *
                                                 1.0,
                                         height: 60.0,
-                                        searchHintTextStyle: FlutterFlowTheme
-                                                .of(context)
-                                            .bodyLarge
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyLargeFamily,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyLargeFamily),
-                                            ),
                                         textStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                         hintText: 'Tipo de usuario.',
-                                        searchHintText: 'Search for an item...',
                                         fillColor: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                         elevation: 2.0,
@@ -439,6 +379,7 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                             12.0, 4.0, 12.0, 4.0),
                                         hidesUnderline: true,
                                         isSearchable: false,
+                                        isMultiSelect: false,
                                       );
                                     },
                                   ),
@@ -446,83 +387,67 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 16.0),
-                                child: StreamBuilder<List<CadenasRecord>>(
-                                  stream: queryCadenasRecord(
-                                    queryBuilder: (cadenasRecord) =>
-                                        cadenasRecord.orderBy('Description'),
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
+                                child: AuthUserStreamWidget(
+                                  builder: (context) =>
+                                      FlutterFlowDropDown<String>(
+                                    controller: _model.cadenaValueController ??=
+                                        FormFieldController<String>(
+                                      _model.cadenaValue ??=
+                                          FFAppState().role == 'admin'
+                                              ? ' '
+                                              : functions.getCadenaDescription(
+                                                  valueOrDefault(
+                                                      currentUserDocument
+                                                          ?.cadena,
+                                                      ''),
+                                                  getJsonField(
+                                                    FFAppState().cadenas,
+                                                    r'''$''',
+                                                  )),
+                                    ),
+                                    options: (getJsonField(
+                                      FFAppState().cadenas,
+                                      r'''$.d.results[:].Description''',
+                                    ) as List)
+                                        .map<String>((s) => s.toString())
+                                        .toList()!,
+                                    onChanged: (val) => setState(
+                                        () => _model.cadenaValue = val),
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 1.0,
+                                    height: 60.0,
+                                    searchHintTextStyle: FlutterFlowTheme.of(
+                                            context)
+                                        .bodyLarge
+                                        .override(
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyLargeFamily,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          useGoogleFonts: GoogleFonts.asMap()
+                                              .containsKey(
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyLargeFamily),
                                         ),
-                                      );
-                                    }
-                                    List<CadenasRecord>
-                                        cadenaCadenasRecordList =
-                                        snapshot.data!;
-                                    return FlutterFlowDropDown<String>(
-                                      controller:
-                                          _model.cadenaValueController ??=
-                                              FormFieldController<String>(
-                                        _model.cadenaValue ??=
-                                            FFAppState().role == 'admin'
-                                                ? ' '
-                                                : FFAppState().cadena,
-                                      ),
-                                      options: cadenaCadenasRecordList
-                                          .map((e) => e.description)
-                                          .toList(),
-                                      onChanged: (val) async {
-                                        setState(
-                                            () => _model.cadenaValue = val);
-                                        await actions.updateSelectedCadena(
-                                          context,
-                                          _model.cadenaValue!,
-                                        );
-                                      },
-                                      width: MediaQuery.of(context).size.width *
-                                          1.0,
-                                      height: 60.0,
-                                      searchHintTextStyle: FlutterFlowTheme.of(
-                                              context)
-                                          .bodyLarge
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyLargeFamily,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyLargeFamily),
-                                          ),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                      hintText: 'Seleccionar cadena',
-                                      searchHintText: 'Search for an item...',
-                                      fillColor: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      elevation: 2.0,
-                                      borderColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      borderWidth: 2.0,
-                                      borderRadius: 12.0,
-                                      margin: EdgeInsetsDirectional.fromSTEB(
-                                          12.0, 4.0, 12.0, 4.0),
-                                      hidesUnderline: true,
-                                      disabled: FFAppState().role != 'admin',
-                                      isSearchable: false,
-                                    );
-                                  },
+                                    textStyle:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    hintText: 'Seleccionar cadena',
+                                    searchHintText: 'Buscar Cadena',
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    elevation: 2.0,
+                                    borderColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                    borderWidth: 2.0,
+                                    borderRadius: 12.0,
+                                    margin: EdgeInsetsDirectional.fromSTEB(
+                                        12.0, 4.0, 12.0, 4.0),
+                                    hidesUnderline: true,
+                                    disabled: FFAppState().role != 'admin',
+                                    isSearchable: true,
+                                    isMultiSelect: false,
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -697,53 +622,80 @@ class _CreateAcoountWidgetState extends State<CreateAcoountWidget> {
                                       0.0, 15.0, 0.0, 15.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      if (_model.passwordController.text !=
-                                          _model
-                                              .confirmPasswordController.text) {
+                                      _model.apiResultsa1 =
+                                          await CreateUserCall.call(
+                                        token: currentJwtToken,
+                                        email:
+                                            _model.emailAddressController.text,
+                                        password:
+                                            _model.passwordController.text,
+                                        displayName:
+                                            _model.namesController.text,
+                                        cadena: functions.getCodeCadena(
+                                            _model.cadenaValue,
+                                            getJsonField(
+                                              FFAppState().cadenas,
+                                              r'''$''',
+                                            )),
+                                        role: FFAppState().selectRole?.id,
+                                      );
+                                      if ((_model.apiResultsa1?.succeeded ??
+                                          true)) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                              'Passwords don\'t match!',
+                                              getJsonField(
+                                                (_model.apiResultsa1
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.message''',
+                                              ).toString(),
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
                                             ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
                                           ),
                                         );
-                                        return;
+                                        context.safePop();
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              getJsonField(
+                                                (_model.apiResultsa1
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.error''',
+                                              ).toString(),
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                          ),
+                                        );
                                       }
 
-                                      final user = await authManager
-                                          .createAccountWithEmail(
-                                        context,
-                                        _model.emailAddressController.text,
-                                        _model.passwordController.text,
-                                      );
-                                      if (user == null) {
-                                        return;
-                                      }
-
-                                      final usersCreateData = {
-                                        ...createUsersRecordData(
-                                          email: _model
-                                              .emailAddressController.text,
-                                          displayName:
-                                              _model.namesController.text,
-                                          roleId: FFAppState().selectRole,
-                                          codenaId: FFAppState().selectCadena,
-                                        ),
-                                        'created_time':
-                                            FieldValue.serverTimestamp(),
-                                      };
-                                      await UsersRecord.collection
-                                          .doc(user.uid)
-                                          .update(usersCreateData);
-
-                                      context.goNamedAuth(
-                                          'HomePage', context.mounted);
+                                      setState(() {});
                                     },
                                     text: 'Crear',
                                     options: FFButtonOptions(
-                                      width: 290.0,
+                                      width: 250.0,
                                       height: 50.0,
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 0.0, 0.0, 0.0),
